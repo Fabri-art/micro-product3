@@ -2,7 +2,6 @@ pipeline {
     agent any
 
     tools {
-        // Define Maven configurado en Jenkins como MAVEN_HOME
         maven "MAVEN_HOME"
     }
 
@@ -10,25 +9,34 @@ pipeline {
         stage('Clone') {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
-                    // Clona desde la rama 'main' del nuevo repositorio
                     git branch: 'main', url: 'https://github.com/Fabri-art/micro-product3.git'
                 }
             }
         }
 
-        stage('Build') {
-                    steps {
-                        dir('micro-product') {
-                                sh 'mvn clean install'
+        stage('Verificar estructura') {
+            steps {
+                sh 'ls -la'
+                sh 'ls -la micro-product'
+            }
         }
-    }
-}
+
+        stage('Build') {
+            steps {
+                timeout(time: 2, unit: 'MINUTES') {
+                    dir('micro-product') {
+                        sh 'mvn -DskipTests clean package'
+                    }
+                }
+            }
+        }
 
         stage('Test') {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
-                    // Ejecuta pruebas y genera reporte (ej. Jacoco)
-                    sh "mvn clean install"
+                    dir('micro-product') {
+                        sh 'mvn clean install'
+                    }
                 }
             }
         }
@@ -36,8 +44,10 @@ pipeline {
         stage('Sonar') {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
-                    withSonarQubeEnv('sonarqube') {
-                        sh "mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Pcoverage"
+                    dir('micro-product') {
+                        withSonarQubeEnv('sonarqube') {
+                            sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar -Pcoverage'
+                        }
                     }
                 }
             }
@@ -45,8 +55,7 @@ pipeline {
 
         stage('Quality gate') {
             steps {
-                sleep(10) // Espera inicial
-
+                sleep(10)
                 timeout(time: 10, unit: 'MINUTES') {
                     waitForQualityGate abortPipeline: true
                 }
@@ -55,10 +64,11 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo "Comando de deploy sería algo como: mvn spring-boot:run"
-                // Puedes reemplazar esto con tu comando real
-                // sh "mvn spring-boot:run"
+                dir('micro-product') {
+                    echo "Ejecutar deploy: mvn spring-boot:run o docker-compose up"
+                }
             }
         }
     }
 }
+
