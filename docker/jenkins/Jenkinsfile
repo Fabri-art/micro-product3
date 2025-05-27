@@ -17,13 +17,12 @@ pipeline {
         }
 
         stage('Build') {
-            steps {
-                timeout(time: 2, unit: 'MINUTES') {
-                    // Compila el proyecto sin ejecutar pruebas
-                    sh "mvn -DskipTests clean package"
-                }
-            }
+                    steps {
+                        dir('micro-product') {
+                                sh 'mvn clean install'
         }
+    }
+}
 
         stage('Test') {
             steps {
