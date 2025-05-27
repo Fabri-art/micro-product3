@@ -1,0 +1,9 @@
+com\rah\demo\microproduct\app\repository\ProductRepository.class
+com\rah\demo\microproduct\app\service\impl\ProductServiceImpl.class
+com\rah\demo\microproduct\app\ProductApplication.class
+com\rah\demo\microproduct\app\service\ProductService.class
+com\rah\demo\microproduct\app\controller\ProductControllerImpl.class
+com\rah\demo\microproduct\app\entity\ProductEntity.class
+com\rah\demo\microproduct\app\config\OpenApiConfig.class
+com\rah\demo\microproduct\app\controller\swagger\ProductCtrlSwagger.class
+com\rah\demo\microproduct\app\model\ProductVo.class
