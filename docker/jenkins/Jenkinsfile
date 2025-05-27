@@ -11,7 +11,7 @@ pipeline {
             steps {
                 timeout(time: 2, unit: 'MINUTES') {
                     // Clona desde la rama 'main' del nuevo repositorio
-                    git branch: 'main', url: 'https://github.com/Fabri-art/micro-product.git'
+                    git branch: 'main', url: 'https://github.com/Fabri-art/micro-product3.git'
                 }
             }
         }
